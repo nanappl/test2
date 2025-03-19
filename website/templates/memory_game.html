@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="memerybox">
+    <div class="memory">    
+        <div class="leftmemory">
+            <h1 class="boldfont">Pamäťová hra</h1>
+            <p>Kliknite na štvorce v správnom poradí!</p>
+            
+            <p id="current-score">Aktuálne skóre: 0</p>
+            <p id="max-score">Maximálne skóre: {{ user.max_score_memory }}</p>
+            
+            <a href="{{ url_for('views.home') }}">
+                <button id="return-button">Späť na domovskú stránku</button>
+            </a>
+
+        </div>
+
+
+        <div class="rightmemory">
+            <div class="grid">
+                <div data-id="1"></div>
+                <div data-id="2"></div>
+                <div data-id="3"></div>
+                <div data-id="4"></div>
+                <div data-id="5"></div>
+                <div data-id="6"></div>
+                <div data-id="7"></div>
+                <div data-id="8"></div>
+                <div data-id="9"></div>
+            </div>
+
+            <button id="start-button">Začať hru</button>
+            <button id="next-round-button" class="hidden">Ďalšie kolo</button>
+            <p id="message"></p>            
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    let sequence = [];
+    let userClicks = [];
+    let isClickable = false;
+    let currentScore = 0;
+    let maxScore = 0;
+
+    const squares = document.querySelectorAll('.grid div');
+    const startButton = document.getElementById('start-button');
+    const nextRoundButton = document.getElementById('next-round-button');
+    const messageDiv = document.getElementById('message');
+    const currentScoreElement = document.getElementById('current-score');
+    const maxScoreElement = document.getElementById('max-score');
+
+    function flashSquare(index) {
+        const square = squares[index - 1];
+        square.classList.add('active');
+        setTimeout(() => square.classList.remove('active'), 500);
+    }
+
+    function playSequence() {
+        isClickable = false;
+        let delay = 0;
+
+        for (let i = 0; i < sequence.length; i++) {
+            setTimeout(() => flashSquare(sequence[i]), delay);
+            delay += 800;
+        }
+
+        setTimeout(() => {
+            isClickable = true;
+            messageDiv.textContent = 'Klikni na štvorce v správnom poradí.';
+        }, delay);
+    }
+
+    function resetGame() {
+        sequence = [];
+        userClicks = [];
+        if (currentScore > maxScore) {
+            maxScore = currentScore;
+            maxScoreElement.textContent = `Max Score: ${maxScore}`;
+            saveMaxScoreToServer(maxScore); 
+        }
+        currentScore = 0;
+        currentScoreElement.textContent = `Current Score: ${currentScore}`;
+        messageDiv.textContent = '';
+        startButton.textContent = 'Začať hru';
+        startButton.classList.remove('hidden');
+        nextRoundButton.classList.add('hidden');
+    }
+
+    function saveMaxScoreToServer(newMaxScore) {
+        fetch('/memory/update_score', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ max_score: newMaxScore })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Max score saved successfully:', data.max_score_memory);
+            } else {
+                console.error('Failed to save max score.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    squares.forEach((square, index) => {
+        square.addEventListener('click', () => {
+            if (!isClickable) return;
+
+            userClicks.push(index + 1);
+            flashSquare(index + 1);
+
+            if (userClicks[userClicks.length - 1] !== sequence[userClicks.length - 1]) {
+                messageDiv.textContent = 'Wrong! Game Over.';
+                isClickable = false;
+                startButton.textContent = 'Restart Game';
+                startButton.classList.remove('hidden');
+                nextRoundButton.classList.add('hidden');
+                resetGame();
+                return;
+            }
+
+            if (userClicks.length === sequence.length) {
+                messageDiv.textContent = 'Správne! Klikni na "Ďalšie kolo".';
+                isClickable = false;
+                nextRoundButton.classList.remove('hidden');
+            }
+        });
+    });
+
+    startButton.addEventListener('click', () => {
+        startButton.classList.add('hidden');
+        userClicks = [];
+        const randomSquare = Math.floor(Math.random() * 9) + 1;
+        sequence = [randomSquare];
+        messageDiv.textContent = 'Sleduj....!';
+        playSequence();
+    });
+
+    nextRoundButton.addEventListener('click', () => {
+        nextRoundButton.classList.add('hidden');
+        userClicks = [];
+        const randomSquare = Math.floor(Math.random() * 9) + 1;
+        sequence.push(randomSquare);
+        messageDiv.textContent = 'Sleduj....!';
+        playSequence();
+
+        currentScore++;
+        currentScoreElement.textContent = `Current Score: ${currentScore}`;
+    });
+</script>
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,33 @@
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Corben:wght@400;700&family=Sigmar&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='start.css') }}">
+</head>
+
+
+
+<div class="about-content">
+    <h1 class="boldfont">
+        O hre
+    </h1>
+    <p style="white-space: pre-line;">
+        Táto hra je navrhnutá tak, aby ti pomohla zlepšiť pamäť 
+        a sústredenie prostredníctvom zábavných a pútavých výziev. 
+        Obsahuje tri rôzne hry: kvíz, pexeso a klasickú pamäťovú hru. 
+        Každá z hier ponúka jedinečný spôsob, akým si môžeš precvičiť rôzne aspekty tvojej pamäte a pozornosti.
+    </p>
+    <p style="white-space: pre-line;">
+        Kvíz preverí tvoje znalosti a udrží tvoj mozog aktívny, pexeso otestuje tvoju schopnosť zapamätať si polohu kariet
+        a pamäťová hra ti pomôže zlepšiť schopnosť sústrediť sa.
+        Či už chceš trénovať svoju myseľ alebo sa len zabaviť, každá hra ti ponúka zábavný a obohacujúci zážitok.
+    </p>
+    <p style="white-space: pre-line;">
+        Je to skvelý spôsob, ako posilniť svoje kognitívne schopnosti 
+        a zároveň si užiť zábavu. Začni hrať teraz a uvidíš, ako sa môžeš zlepšiť!
+    </p>
+    <a href="{{ url_for('views.home') }}" class="returninfo">
+        Späť
+    </a>    
+</div>

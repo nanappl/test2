@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Result{% endblock %}
+
+{% block content %}
+<div class="quizresbox">
+    <h2>Kvíz dokončený!</h2>
+    <p>Vaše skóre: {{ score }}</p>
+    <p>Vaše maximálne skóre: {{ max_score }}</p>
+
+    <a href="{{ url_for('quiz.quiz_page') }}" class="buttonresquiz">Skúsiť znova</a>
+    <a href="/" class="buttonresquiz">Späť na domovskú stránku</a>
+</div>
+
+{% endblock %}

@@ -1,0 +1,136 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Corben", serif;
+  font-weight: 400;
+    background-color: #f0dfd7;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(
+        rgba(62, 62, 62, 0.5), 
+        rgba(132, 132, 132, 0.5)
+    ), url(images/strart.png);
+    background-size: cover;            
+    background-position: center;     
+    background-repeat: no-repeat;      
+    background-attachment: fixed;   
+}
+    
+
+.startcon {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    width: 450px;
+    margin-top: 20px;
+    display: flex;
+    gap: 50px;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.play {
+    opacity: 1;
+    animation: bounce 3s infinite;
+    font-size: 100px;
+    color: #220A0D;
+    transition: 0.3s;
+}
+
+.play:hover {
+    font-size: 120px;
+    color: #340a0f;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    background: none;
+    border: none;
+    outline: none;
+    font: inherit;
+    cursor: pointer;
+}
+
+.aboutbtn p {
+    margin: 0;
+}
+
+.aboutbtn{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #8e2428;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.returninfo{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #8e2428;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.aboutbtn:hover {
+    background-color: #aa3b3f;
+}
+
+.about-content {
+    background-color: white;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 450px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.about-title {
+    font-size: 28px;
+    color: #220A0D;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.about-content p {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.boldfont{
+    margin: 0;
+    font-family: "Corben", serif;
+}

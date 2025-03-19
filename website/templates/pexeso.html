@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="main-screen">
+    <h1 class="boldfont">Pexeso pamäťová hra</h1>
+    <button id="start-button">Začať hru</button>
+    <a href="{{ url_for('views.home') }}">
+        <button id="return-button">Späť na domovskú stránku</button>
+    </a>
+    <p>Najkratší čas: <span id="shortest-time">--</span> sekúnd</p>
+</div>
+
+<div class="game-container" style="display: none;">
+    <div class="scoreboard">
+        <p>Čas: <span id="timer">0</span>s</p>
+    </div>
+    <div class="pexeso-grid" id="game-grid" style="display: none;"></div>
+    <a href="{{ url_for('views.home') }}">
+        <button id="return-button">Späť na domovskú stránku</button>
+    </a>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const grid = document.getElementById("game-grid");
+    const timerEl = document.getElementById("timer");
+    const startButton = document.getElementById("start-button");
+    const scoreboard = document.querySelector(".scoreboard");
+    const shortestTimeEl = document.getElementById("shortest-time");
+    const mainScreen = document.querySelector(".main-screen");
+    const gameContainer = document.querySelector(".game-container");
+
+    let cards = [];
+    let flippedCards = [];
+    let matchedPairs = 0;
+    let timeElapsed = 0;
+    let timer;
+    let shortestTime = null;
+
+   
+    const cardImages = [
+    "/static/images/pexesoimg/1.png", 
+    "/static/images/pexesoimg/2.png",
+    "/static/images/pexesoimg/3.png",
+    "/static/images/pexesoimg/4.png",
+    "/static/images/pexesoimg/5.png",
+    "/static/images/pexesoimg/6.png",
+    "/static/images/pexesoimg/7.png",
+    "/static/images/pexesoimg/8.png",
+    "/static/images/pexesoimg/9.png",
+    "/static/images/pexesoimg/10.png",
+];
+
+    let cardSet = [...cardImages, ...cardImages]; 
+
+    function shuffle(array) {
+        return array.sort(() => Math.random() - 0.5);
+    }
+
+    fetch("/get_user_shortest_time")
+        .then(response => response.json())
+        .then(data => {
+            if (data.shortest_time !== null) {
+                shortestTime = data.shortest_time;
+                shortestTimeEl.textContent = shortestTime;
+            } else {
+                shortestTimeEl.textContent = "--";
+            }
+        })
+        .catch(error => console.error("Error fetching shortest time:", error));
+
+    function startGame() {
+        mainScreen.style.display = "none";
+        gameContainer.style.display = "block";
+        grid.style.display = "grid";
+        scoreboard.style.display = "block";
+        startButton.style.display = "none";
+        grid.innerHTML = "";
+        cards = [];
+        flippedCards = [];
+        matchedPairs = 0;
+        timeElapsed = 0;
+        timerEl.textContent = timeElapsed;
+        clearInterval(timer);
+        timer = setInterval(updateTimer, 1000);
+
+        cardSet = shuffle(cardSet);
+        cardSet.forEach((imageUrl, index) => {
+            const card = document.createElement("div");
+            card.classList.add("card");
+            card.dataset.symbol = imageUrl; 
+            card.dataset.index = index;
+
+
+            const back = document.createElement("div");
+            back.classList.add("card-back");
+
+
+            const img = document.createElement("img");
+            img.src = imageUrl;  
+            img.alt = "Fruit image"; 
+            img.classList.add("card-front"); 
+
+
+            card.appendChild(back);
+            card.appendChild(img);
+
+
+            card.addEventListener("click", flipCard);
+            grid.appendChild(card);
+            cards.push(card);
+        });
+    }
+
+    function flipCard() {
+        if (flippedCards.length < 2 && !this.classList.contains("matched")) {
+            this.classList.add("flipped");
+            this.querySelector(".card-front").style.display = "block";  
+            this.querySelector(".card-back").style.display = "none";  
+            flippedCards.push(this);
+        }
+        if (flippedCards.length === 2) {
+            setTimeout(checkMatch, 500);
+        }
+    }
+
+    function checkMatch() {
+        const [card1, card2] = flippedCards;
+        if (card1.dataset.symbol === card2.dataset.symbol) {
+            card1.classList.add("matched");
+            card2.classList.add("matched");
+            matchedPairs++;
+        } else {
+            card1.classList.remove("flipped");
+            card2.classList.remove("flipped");
+            card1.querySelector(".card-front").style.display = "none"; 
+            card2.querySelector(".card-front").style.display = "none"; 
+            card1.querySelector(".card-back").style.display = "block"; 
+            card2.querySelector(".card-back").style.display = "block"; 
+        }
+        flippedCards = [];
+
+        if (matchedPairs === cardImages.length) {
+            clearInterval(timer);
+            updateShortestTime();
+
+            setTimeout(() => {
+                alert(`Všetko si uhádol! Tvoj čas: ${timeElapsed}s`);
+                startButton.textContent = "Reštartovať hru";
+                startButton.style.display = "block";
+                gameContainer.style.display = "none";
+                mainScreen.style.display = "flex";
+            }, 500);
+        }
+    }
+
+    function updateTimer() {
+        timeElapsed++;
+        timerEl.textContent = timeElapsed;
+    }
+
+    function updateShortestTime() {
+        if (shortestTime === null || timeElapsed < shortestTime) {
+            shortestTime = timeElapsed;
+            shortestTimeEl.textContent = shortestTime;
+
+            fetch("/update_shortest_time", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    shortest_time: shortestTime
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        }
+    }
+
+    startButton.addEventListener("click", startGame);
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,77 @@
+.quiz {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.variant {
+    width: 300px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border: 2px solid #553f40;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.variant:hover {
+    background-color: #ecbaba;
+    color: #000;
+}
+
+input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    accent-color: #e46b51;
+}
+
+label {
+    font-size: 16px;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    display: inline-block;
+    width: 100%;
+}
+
+
+#submitquiz{
+    margin-bottom: 10px;
+}   
+
+.quizresbox{
+    margin-top: 20px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.buttonresquiz {
+    background-color: #8e2428;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.buttonresquiz:hover {
+    background-color: #9f4035;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+

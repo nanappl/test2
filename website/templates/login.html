@@ -1,0 +1,73 @@
+{% extends "base.html" %} 
+{% block title %}Login Page{% endblock %}
+
+{% block content %}
+<div class="registration registration-form">
+  <form method="POST" id="loginForm">
+    <h3 align="center">Prihlásenie</h3>
+
+    <div class="form-group">
+      <label for="email">Emailová adresa</label>
+      <input type="email" class="form-control" id="email" name="email" placeholder="Zadajte email" required />
+      <small class="error-message" id="emailError"></small>
+    </div>
+    
+    <div class="form-group">
+      <label for="password">Heslo</label>
+      <input type="password" class="form-control" id="password" name="password" placeholder="Zadajte heslo" required />
+      <small class="error-message" id="passwordError"></small>
+    </div>
+    
+    <br />
+    <button type="submit" id="submitBtn" disabled>Prihlásiť sa</button>
+    </form>    
+</div>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const submitBtn = document.getElementById("submitBtn");
+    const emailError = document.getElementById("emailError");
+    const passwordError = document.getElementById("passwordError");
+
+    function validateEmail() {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (emailRegex.test(emailInput.value)) {
+        emailInput.classList.remove("invalid");
+        emailInput.classList.add("valid");
+        emailError.textContent = "";
+        return true;
+      } else {
+        emailInput.classList.remove("valid");
+        emailInput.classList.add("invalid");
+        emailError.textContent = "Invalid email format.";
+        return false;
+      }
+    }
+
+    function validatePassword() {
+      if (passwordInput.value.length >= 6) {
+        passwordInput.classList.remove("invalid");
+        passwordInput.classList.add("valid");
+        passwordError.textContent = "";
+        return true;
+      } else {
+        passwordInput.classList.remove("valid");
+        passwordInput.classList.add("invalid");
+        passwordError.textContent = "Password must be at least 6 characters.";
+        return false;
+      }
+    }
+
+    function checkFormValidity() {
+      submitBtn.disabled = !(validateEmail() && validatePassword());
+    }
+
+    emailInput.addEventListener("input", checkFormValidity);
+    passwordInput.addEventListener("input", checkFormValidity);
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends "base.html" %} 
+{% block title %}Sign Up{% endblock %}
+
+{% block content %} 
+<div class="registration registration-form">
+  <form method="POST" id="signupForm">
+    <h3 align="center">Registrácia</h3>
+
+    <div class="form-group">
+      <label for="email">Emailová adresa</label>
+      <input type="email" class="form-control" id="email" name="email" placeholder="Zadajte email" required />
+      <small class="error-message" id="emailError"></small>
+    </div>
+    
+    <div class="form-group">
+      <label for="username">Užívateľské meno</label>
+      <input type="text" class="form-control" id="username" name="username" placeholder="Zadajte svoje užívateľské meno" required />
+      <small class="error-message" id="usernameError"></small>
+    </div>
+    
+    <div class="form-group">
+      <label for="password">Heslo</label>
+      <input type="password" class="form-control" id="password" name="password" placeholder="Zadajte heslo" required />
+      <small class="error-message" id="passwordError"></small>
+    </div>
+    
+    <div class="form-group">
+      <label for="password1">Opakujte heslo</label>
+      <input type="password" class="form-control" id="password1" name="password1" placeholder="Opakujte heslo" required />
+      <small class="error-message" id="password1Error"></small>
+    </div>
+    
+    <br />
+    <button type="submit" id="submitBtn" disabled>Odoslať</button>
+    </form>    
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const emailInput = document.getElementById("email");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const password1Input = document.getElementById("password1");
+    const submitBtn = document.getElementById("submitBtn");
+
+    const emailError = document.getElementById("emailError");
+    const usernameError = document.getElementById("usernameError");
+    const passwordError = document.getElementById("passwordError");
+    const password1Error = document.getElementById("password1Error");
+
+    function validateEmail() {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (emailRegex.test(emailInput.value)) {
+        emailInput.classList.remove("invalid");
+        emailInput.classList.add("valid");
+        emailError.textContent = "";
+        return true;
+      } else {
+        emailInput.classList.remove("valid");
+        emailInput.classList.add("invalid");
+        emailError.textContent = "Neplatný formát e-mailu.";
+        return false;
+      }
+    }
+
+    function validateUsername() {
+      if (usernameInput.value.length >= 3) {
+        usernameInput.classList.remove("invalid");
+        usernameInput.classList.add("valid");
+        usernameError.textContent = "";
+        return true;
+      } else {
+        usernameInput.classList.remove("valid");
+        usernameInput.classList.add("invalid");
+        usernameError.textContent = "Používateľské meno musí mať aspoň 3 znaky.";
+        return false;
+      }
+    }
+
+    function validatePassword() {
+      if (passwordInput.value.length >= 12) {
+        passwordInput.classList.remove("invalid");
+        passwordInput.classList.add("valid");
+        passwordError.textContent = "";
+        return true;
+      } else {
+        passwordInput.classList.remove("valid");
+        passwordInput.classList.add("invalid");
+        passwordError.textContent = "Heslo musí mať aspoň 12 znakov.";
+        return false;
+      }
+    }
+
+    function validatePasswordMatch() {
+      if (passwordInput.value === password1Input.value && passwordInput.value.length >= 6) {
+        password1Input.classList.remove("invalid");
+        password1Input.classList.add("valid");
+        password1Error.textContent = "";
+        return true;
+      } else {
+        password1Input.classList.remove("valid");
+        password1Input.classList.add("invalid");
+        password1Error.textContent = "Heslá sa nezhodujú.";
+        return false;
+      }
+    }
+
+    function checkFormValidity() {
+      submitBtn.disabled = !(validateEmail() && validateUsername() && validatePassword() && validatePasswordMatch());
+    }
+
+    emailInput.addEventListener("input", checkFormValidity);
+    usernameInput.addEventListener("input", checkFormValidity);
+    passwordInput.addEventListener("input", checkFormValidity);
+    password1Input.addEventListener("input", checkFormValidity);
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Quiz Math{% endblock %}
+
+{% block content %}
+
+<div class="quiz">
+    <h2>Otázka {{ index }} z {{ total_questions }}</h2>
+    <p>{{ question.question }}</p>
+    
+    <form method="POST">
+        {% for option in question.options %}
+        <div class="variant">
+            <input type="radio" id="option_{{ loop.index }}" name="answer" value="{{ option }}">
+            <label for="option_{{ loop.index }}">{{ option }}</label>
+        </div>
+        {% endfor %}
+        <button id="submitquiz" type="submit">Odoslať</button>
+    </form>
+    
+    <a href="{{ url_for('views.home') }}">
+        <button id="return-button">Späť na domovskú stránku</button>
+    </a>    
+</div>
+
+
+
+
+
+
+
+{% endblock %}

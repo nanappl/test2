@@ -1,0 +1,39 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %}
+
+{% block content %} 
+<div class="home">
+
+
+    <h1 class="boldfont">Vitaj, <span id="usernamehome">{{ user.username }}</span>!</h1>
+
+    <div class="statisticts">
+        <p>Tvoje najvyššie skóre v kvíze je: {{ user.max_score }}</p>
+        <p>Tvoj najkratší čas v pexese je: {{ user.shortest }}s</p>
+        <p>Tvoje najvyššie skóre v pamäťovej hre je: {{ user.max_score_memory }}</p>
+    </div>
+    
+
+<div class="choose">
+    <a href="/pexeso">
+    <div class="pexeso chooseBox">
+        <img class = "imagegame"  src="{{ url_for('static', filename='images/1.svg') }}" alt="Image">
+        <h1 class="boldfont">Pexeso</h1>
+    </div>
+    </a>
+    <a href="/memory">
+    <div class="memory_game chooseBox">
+        <img class = "imagegame" src="{{ url_for('static', filename='images/3.svg') }}" alt="Image">
+        <h1 class="boldfont">Pamäťová hra</h1>
+    </div>
+    </a>
+    <a href="/quizm">
+        <div class="quizmath chooseBox">
+            <img class = "imagegame"  src="{{ url_for('static', filename='images/2.svg') }}" alt="Image">
+            <h1 class="boldfont">Quiz</h1>
+        </div>
+        </a>
+</div>
+
+</div>
+
+{% endblock %}
